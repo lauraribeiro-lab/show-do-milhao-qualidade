@@ -189,7 +189,7 @@
       margin-bottom:6px;
       font-weight:bold;">
       <span>⏳ Tempo restante</span>
-      <span id="timer">20s</span>
+      <span id="timer">30s</span>
   </div>
 
   <div style="
@@ -612,8 +612,6 @@ await salvarRankingSharePoint(entry);
     $("c-score").textContent =
         score;
 
-$("c-pos").textContent =
-    "Ranking online";
 
     $("c-hits").textContent =
         `${hits}/${QUESTIONS.length}`;
@@ -699,66 +697,71 @@ console.log("Ranked:", ranked);
 
     }
 
-    ranked.forEach((r,i)=>{
+ranked.forEach((r,i)=>{
 
-        const tr =
-            document.createElement("tr");
+    const tr =
+        document.createElement("tr");
 
-       const medal =
-    matricula == minhaMatricula
-        ? "⭐ Você"
-        : (["🥇","🥈","🥉"][i] || (i+1));
+    const score =
+        r.Pontuacao ?? r.pontuacao ?? 0;
 
-        const score =
-            r.Pontuacao ?? r.pontuacao ?? 0;
+    const tempo =
+        r.TempoSegundos ?? r.tempo ?? 0;
 
-        const tempo =
-            r.TempoSegundos ?? r.tempo ?? 0;
+    const nivel =
+        r.Nivel ?? r.nivel ?? "";
 
-        const nivel =
-            r.Nivel ?? r.nivel ?? "";
+    const nome =
+        r.Title ?? r.nome ?? "";
 
-        const nome =
-            r.Title ?? r.nome ?? "";
+    const matricula =
+        r.Matricula ?? r.matricula ?? "";
 
-        const matricula =
-            r.Matricula ?? "";
-      if(matricula == minhaMatricula){
-    tr.classList.add("me");
-};
+    const area =
+        r.Area ?? "";
 
-        const area =
-            r.Area ?? "";
+    const unidade =
+        r.Unidade ?? "";
 
-        const unidade =
-            r.Unidade ?? "";
+    const medal =
+        matricula == minhaMatricula
+            ? "⭐ Você"
+            : (["🥇","🥈","🥉"][i] || (i+1));
 
-        [
-            medal,
-            nome,
-            matricula,
-            area,
-            unidade,
-            score,
-            fmtT(Number(tempo)),
-            nivel
-        ].forEach((v,k)=>{
+    if(matricula == minhaMatricula){
 
-            const td =
-                document.createElement("td");
+        tr.classList.add("me");
 
-            td.textContent = v;
+        $("c-pos").textContent =
+            (i + 1) + "º lugar";
+    }
 
-            if([0,5,6].includes(k))
-                td.className = "n";
+    [
+        medal,
+        nome,
+        matricula,
+        area,
+        unidade,
+        score,
+        fmtT(Number(tempo)),
+        nivel
+    ].forEach((v,k)=>{
 
-            tr.appendChild(td);
+        const td =
+            document.createElement("td");
 
-        });
+        td.textContent = v;
 
-        body.appendChild(tr);
+        if([0,5,6].includes(k))
+            td.className = "n";
+
+        tr.appendChild(td);
 
     });
+
+    body.appendChild(tr);
+
+});
 
 }
 $("btn-novo").onclick=()=>{ player=null; ["nome","matricula"].forEach(i=>$(i).value=""); $("area").value="";$("unidade").value=""; show("p-cadastro"); };
