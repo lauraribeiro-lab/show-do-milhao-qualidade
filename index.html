@@ -91,7 +91,11 @@
   th,td{padding:10px 8px;text-align:left;border-bottom:1px solid var(--line)}
   th{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.5px}
   td.n,th.n{text-align:center}
-  tr.me{background:rgba(251,191,36,.18);font-weight:700}
+  tr.me{
+    background:rgba(251,191,36,.25);
+    font-weight:800;
+    box-shadow:inset 4px 0 0 #fbbf24;
+}
   .tablewrap{overflow-x:auto}
   footer{margin-top:22px;text-align:center;font-weight:800;letter-spacing:2px}
   footer small{display:block;font-size:.65rem;letter-spacing:3px;color:var(--muted)}
@@ -588,6 +592,11 @@ async function finish(){
         level: lvl.name,
         date: new Date().toISOString()
     };
+  localStorage.setItem(
+    "ultimaMatricula",
+    player.matricula
+);
+
 
 await salvarRankingSharePoint(entry);
   
@@ -668,7 +677,8 @@ return dados || [];
 
 }
 async function renderRank(){
-
+const minhaMatricula =
+localStorage.getItem("ultimaMatricula");
     const body = $("rank-body");
 
     body.innerHTML =
@@ -694,8 +704,10 @@ console.log("Ranked:", ranked);
         const tr =
             document.createElement("tr");
 
-        const medal =
-            ["🥇","🥈","🥉"][i] || (i+1);
+       const medal =
+    matricula == minhaMatricula
+        ? "⭐ Você"
+        : (["🥇","🥈","🥉"][i] || (i+1));
 
         const score =
             r.Pontuacao ?? r.pontuacao ?? 0;
@@ -711,6 +723,9 @@ console.log("Ranked:", ranked);
 
         const matricula =
             r.Matricula ?? "";
+      if(matricula == minhaMatricula){
+    tr.classList.add("me");
+};
 
         const area =
             r.Area ?? "";
